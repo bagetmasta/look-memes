@@ -1,3 +1,4 @@
+import CategoryList from "../components/categories/category-list";
 import Head from "next/head";
 
 export default function Home() {
@@ -7,6 +8,7 @@ export default function Home() {
         <title>Look Memes</title>
         <meta name="description" content="" />
       </Head>
+      <CategoryList />
     </>
   );
 }
