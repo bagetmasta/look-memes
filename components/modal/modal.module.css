@@ -1,0 +1,130 @@
+.modalBackdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #15161b;
+  background: rgba(21, 22, 27, 0.9);
+  z-index: 1000;
+}
+
+.modalContent {
+  position: relative;
+  background: #272934;
+  padding: 32px 24px;
+  border-radius: 4px;
+  z-index: 1001;
+
+  width: 400px;
+
+  @media screen and (max-width: 424px) {
+    width: 300px;
+  }
+}
+
+.closeButton {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+}
+
+.closeButton:hover,
+.closeButton:focus {
+  transform: scale(1.2);
+}
+
+.title {
+  color: #fff;
+  text-align: center;
+  font-size: 24px;
+  font-weight: 500;
+  line-height: 100%;
+  margin-bottom: 24px;
+}
+
+.text {
+  color: #9b9d9f;
+  text-align: center;
+  font-size: 20px;
+  line-height: 120%;
+  margin-bottom: 24px;
+}
+
+.deleteButton {
+  color: #fff;
+  text-align: center;
+  font-weight: 700;
+  line-height: 112.5%;
+  margin-bottom: 24px;
+
+  display: flex;
+  width: 352px;
+  height: 58px;
+  padding: 14px 0px;
+  justify-content: center;
+  align-items: center;
+
+  border-radius: 4px;
+  background: linear-gradient(104deg, #a139fd 11.26%, #50bdfc 90.79%);
+
+  box-shadow: 0px 4px 7px 0px rgba(0, 0, 0, 0.08);
+
+  @media screen and (max-width: 424px) {
+    width: 200px;
+  }
+}
+
+.deleteButton::before {
+  content: "";
+  width: 16px;
+  height: 14px;
+  margin-right: 10px;
+  flex-shrink: 0;
+  background-repeat: no-repeat;
+  background-image: url("../../public/images/white-delete.svg");
+}
+
+.cancelButton {
+  display: flex;
+  width: 352px;
+  height: 58px;
+  padding: 14px 0px;
+
+  color: #ff5b5b;
+  background: transparent;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 16px;
+
+  line-height: 100%;
+
+  @media screen and (max-width: 424px) {
+    width: 150px;
+  }
+}
+
+.deleteButton:hover,
+.deleteButton:focus {
+  background: linear-gradient(104deg, #b250fd 11.26%, #60cdfd 90.79%);
+  box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+}
+
+.cancelButton:hover,
+.cancelButton:focus {
+  text-decoration: underline;
+}
+
+.buttonWrapper {
+  @media screen and (max-width: 424px) {
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+  }
+}

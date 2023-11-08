@@ -1,54 +1,88 @@
-import React, { useState, useEffect } from "react";
+import styles from "./category-item.module.css";
+import ToggleSwitch from "../toggle-switch/toggle-switch";
+import Image from "next/image";
 
 export default function CategoryItem({
   register,
-  control,
   category,
   index,
-  remove,
+  currentInputIndex,
+  setIsEditing,
+  setValue,
+  handleDeleteClick,
 }) {
-  const [isEditing, setIsEditing] = useState(false);
-  const [localName, setLocalName] = useState(category.name);
-  const [localIsActive, setLocalIsActive] = useState(category.isActive);
-
-  useEffect(() => {
-    setLocalName(category.name);
-    setLocalIsActive(category.isActive);
-  }, [category]);
-
-  const saveChanges = () => {
-    setIsEditing(false);
-    // Ваша логика для сохранения изменений
-  };
-
-  const cancelChanges = () => {
-    setLocalName(category.name); // Сброс к начальному состоянию
-    setLocalIsActive(category.isActive); // Сброс к начальному состоянию
-    setIsEditing(false);
+  // Функция для обновления значения
+  const updateValue = (name, value) => {
+    setValue(name, value);
   };
 
   return (
-    <div>
+    <div className={styles.wrapper}>
       <input
+        className={styles.category}
         {...register(`categories.${index}.name`)}
-        value={localName}
-        onChange={(e) => setLocalName(e.target.value)}
-        onFocus={() => setIsEditing(true)}
+        defaultValue={category.name}
+        onBlur={(e) => {
+          updateValue(`categories.${index}.name`, e.target.value);
+        }}
+        onFocus={() => {
+          setIsEditing(true);
+          currentInputIndex(index);
+        }}
         placeholder="Enter Category Name"
       />
-      <input
-        type="checkbox"
-        {...register(`categories.${index}.isActive`)}
-        checked={localIsActive}
-        onChange={(e) => setLocalIsActive(e.target.checked)}
-        onFocus={() => setIsEditing(true)}
+      <ToggleSwitch
+        register={register}
+        name={`categories.${index}.isActive`}
+        defaultChecked={category.isActive}
+        updateValue={updateValue}
+        // onBlur={(e) => {
+        //   // Обновляем состояние при потере фокуса
+        //   updateValue(`categories.${index}.isActive`, e.target.checked);
+        // }}
+        setIsEditing={setIsEditing}
+        currentInputIndex={currentInputIndex}
+        index={index}
+        // onFocus={() => {
+        //   setIsEditing(true);
+        //   currentInputIndex(index);
+        // }}
       />
-      {isEditing && (
-        <>
-          <button onClick={saveChanges}>Save Changes</button>
-          <button onClick={cancelChanges}>Cancel</button>
-        </>
-      )}
+      {/* <ToggleSwitch register={register} name={`categories.${index}.isActive`} /> */}
+      <button type="button" onClick={() => handleDeleteClick(index)}>
+        <Image
+          className={styles.deleteButton}
+          src={"/images/delete.svg"}
+          width={30}
+          height={30}
+          alt="delete"
+        />
+      </button>
+      <button type="button">
+        <Image
+          className={styles.dragDropButton}
+          src={"/images/drag-drop.svg"}
+          width={8}
+          height={13}
+          alt="drag drop"
+        />
+      </button>
     </div>
   );
+}
+
+{
+  /* <input
+type="checkbox"
+{...register(`categories.${index}.isActive`)}
+defaultChecked={category.isActive}
+onBlur={(e) => {
+  // Обновляем состояние при потере фокуса
+  updateValue(`categories.${index}.isActive`, e.target.checked);
+}}
+onFocus={() => {
+  setIsEditing(true);
+  currentInputIndex(index);
+}}
+/> */
 }
