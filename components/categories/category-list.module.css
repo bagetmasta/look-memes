@@ -134,3 +134,7 @@
 .cancel:hover {
   text-decoration: underline;
 }
+
+.noCategories {
+  color: white;
+}

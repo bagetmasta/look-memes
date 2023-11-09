@@ -13,9 +13,9 @@ export default function CategoryList({ searchTerm }) {
     useForm({
       defaultValues: {
         categories: [
-          { name: "Popular", isActive: true },
-          { name: "New", isActive: true },
-          { name: "Other", isActive: true },
+          { specialKey: 0, name: "Popular", isActive: true },
+          { specialKey: 1, name: "New", isActive: true },
+          { specialKey: 2, name: "Other", isActive: true },
         ],
       },
     });
@@ -27,7 +27,7 @@ export default function CategoryList({ searchTerm }) {
 
   const handleDeleteClick = (index) => {
     setDeletingIndex(index);
-    setIsModalOpen(true); // Показать модальное окно
+    setIsModalOpen(true);
   };
 
   const closeModal = () => {
@@ -37,19 +37,15 @@ export default function CategoryList({ searchTerm }) {
   const confirmDelete = () => {
     cancelCategoryUpdate(currentInputIndex);
     if (deletingIndex !== null) {
-      // Здесь логика для перемещения шаблонов в категорию "Other" перед удалением
       remove(deletingIndex);
       closeModal();
     }
   };
 
   const onSubmit = (data) => {
-    console.log("сработал onSubmit");
-    console.log("Submitted data:", data);
-    handleSaveChanges(data); // Вызов функции для сохранения изменений
+    handleSaveChanges(data);
   };
 
-  // Функция для отмены изменений конкретного элемента списка
   const cancelCategoryUpdate = (index) => {
     const currentValues = getValues("categories");
     currentValues[index] = fields[index];
@@ -58,22 +54,14 @@ export default function CategoryList({ searchTerm }) {
   };
 
   const handleSaveChanges = (data) => {
-    console.log("handleSaveChanges");
     const updatedCategories = getValues("categories");
-    // Здесь вы можете отправить updatedCategories куда нужно, например, на сервер
-    // или обновить состояние в контексте/глобальном стейте, если это необходимо
-    console.log(updatedCategories);
     reset({ categories: updatedCategories });
     setIsEditing(false);
   };
 
-  console.log(`Search Term: ${searchTerm}`); // Добавьте этот console.log перед использованием `filteredFields`
-
   const filteredFields = searchTerm
     ? fields.filter((field) => field.name.toLowerCase().includes(searchTerm))
     : fields;
-
-  console.log(filteredFields);
 
   return (
     <>
@@ -87,19 +75,23 @@ export default function CategoryList({ searchTerm }) {
         </button>
 
         <div className={styles.wrapper}>
-          {filteredFields.map((field, index) => (
-            <CategoryItem
-              styles={styles}
-              key={field.id}
-              register={register}
-              category={field}
-              index={index}
-              currentInputIndex={setCurrentInputIndex}
-              setIsEditing={setIsEditing}
-              setValue={setValue}
-              handleDeleteClick={handleDeleteClick}
-            />
-          ))}
+          {filteredFields.length > 0 ? (
+            filteredFields.map((field, index) => (
+              <CategoryItem
+                styles={styles}
+                key={field.id}
+                register={register}
+                category={field}
+                specialKey={field.specialKey}
+                index={index}
+                currentInputIndex={setCurrentInputIndex}
+                setIsEditing={setIsEditing}
+                handleDeleteClick={handleDeleteClick}
+              />
+            ))
+          ) : (
+            <p className={styles.noCategories}>No categories</p>
+          )}
         </div>
 
         {isEditing && (

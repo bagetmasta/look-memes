@@ -14,7 +14,10 @@ export default function Home() {
     <>
       <Head>
         <title>Look Memes</title>
-        <meta name="description" content="" />
+        <meta
+          name="description"
+          content="Create and manage categories for your favorite memes. Browse, add, or delete categories to better organize your meme collection."
+        />
       </Head>
       <Header onSearchChange={handleSearchChange} />
       <main>

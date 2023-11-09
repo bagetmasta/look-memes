@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import styles from "./category-item.module.css";
 import ToggleSwitch from "../toggle-switch/toggle-switch";
 import Image from "next/image";
@@ -8,23 +9,20 @@ export default function CategoryItem({
   index,
   currentInputIndex,
   setIsEditing,
-  setValue,
   handleDeleteClick,
 }) {
-  // Функция для обновления значения
-  const updateValue = (name, value) => {
-    setValue(name, value);
-  };
+  const [isActive, setIsActive] = useState(false);
 
   return (
     <div className={styles.wrapper}>
       <input
-        className={styles.category}
+        className={
+          isActive
+            ? `${styles.category}`
+            : `${styles.category} ${styles.categoryInactive}`
+        }
         {...register(`categories.${index}.name`)}
         defaultValue={category.name}
-        onBlur={(e) => {
-          updateValue(`categories.${index}.name`, e.target.value);
-        }}
         onFocus={() => {
           setIsEditing(true);
           currentInputIndex(index);
@@ -35,54 +33,35 @@ export default function CategoryItem({
         register={register}
         name={`categories.${index}.isActive`}
         defaultChecked={category.isActive}
-        updateValue={updateValue}
-        // onBlur={(e) => {
-        //   // Обновляем состояние при потере фокуса
-        //   updateValue(`categories.${index}.isActive`, e.target.checked);
-        // }}
+        setIsActive={setIsActive}
         setIsEditing={setIsEditing}
         currentInputIndex={currentInputIndex}
         index={index}
-        // onFocus={() => {
-        //   setIsEditing(true);
-        //   currentInputIndex(index);
-        // }}
       />
-      {/* <ToggleSwitch register={register} name={`categories.${index}.isActive`} /> */}
-      <button type="button" onClick={() => handleDeleteClick(index)}>
-        <Image
-          className={styles.deleteButton}
-          src={"/images/delete.svg"}
-          width={30}
-          height={30}
-          alt="delete"
-        />
-      </button>
-      <button type="button">
-        <Image
-          className={styles.dragDropButton}
-          src={"/images/drag-drop.svg"}
-          width={8}
-          height={13}
-          alt="drag drop"
-        />
-      </button>
+      {category.name !== "Other" && (
+        <>
+          <button
+            type="button"
+            className={styles.deleteButton}
+            onClick={() => handleDeleteClick(index)}
+          >
+            <Image
+              src={"/images/delete.svg"}
+              width={30}
+              height={30}
+              alt="delete"
+            />
+          </button>
+          <button type="button" className={styles.dragDropButton}>
+            <Image
+              src={"/images/drag-drop.svg"}
+              width={8}
+              height={13}
+              alt="drag drop"
+            />
+          </button>
+        </>
+      )}
     </div>
   );
-}
-
-{
-  /* <input
-type="checkbox"
-{...register(`categories.${index}.isActive`)}
-defaultChecked={category.isActive}
-onBlur={(e) => {
-  // Обновляем состояние при потере фокуса
-  updateValue(`categories.${index}.isActive`, e.target.checked);
-}}
-onFocus={() => {
-  setIsEditing(true);
-  currentInputIndex(index);
-}}
-/> */
 }

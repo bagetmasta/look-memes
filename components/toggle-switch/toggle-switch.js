@@ -1,6 +1,7 @@
+import React, { useEffect } from "react";
 import styles from "./toggle-switch.module.css";
 
-const ToggleSwitch = ({
+export default function ToggleSwitch({
   register,
   name,
   defaultChecked,
@@ -8,24 +9,29 @@ const ToggleSwitch = ({
   setIsEditing,
   currentInputIndex,
   index,
-}) => (
-  <label className={styles.switch}>
-    <input
-      className={styles.input}
-      defaultChecked={defaultChecked}
-      onBlur={(e) => {
-        // Обновляем состояние при потере фокуса
-        updateValue(`categories.${index}.isActive`, e.target.checked);
-      }}
-      onFocus={() => {
-        setIsEditing(true);
-        currentInputIndex(index);
-      }}
-      type="checkbox"
-      {...register(name)}
-    />
-    <span className={`${styles.slider} ${styles.round}`}></span>
-  </label>
-);
+  setIsActive,
+}) {
+  useEffect(() => {
+    setIsActive(defaultChecked);
+  }, [defaultChecked, setIsActive]);
 
-export default ToggleSwitch;
+  return (
+    <label className={styles.switch}>
+      <input
+        className={styles.input}
+        defaultChecked={defaultChecked}
+        onBlur={(e) => {
+          updateValue(`categories.${index}.isActive`, e.target.checked);
+          setIsActive(e.target.checked);
+        }}
+        onFocus={() => {
+          setIsEditing(true);
+          currentInputIndex(index);
+        }}
+        type="checkbox"
+        {...register(name)}
+      />
+      <span className={`${styles.slider} ${styles.round}`}></span>
+    </label>
+  );
+}
