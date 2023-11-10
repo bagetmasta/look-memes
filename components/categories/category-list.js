@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Notiflix from "notiflix";
 import styles from "./category-list.module.css";
 import { useForm, useFieldArray } from "react-hook-form";
 import CategoryItem from "./category-item";
@@ -43,13 +44,26 @@ export default function CategoryList({ searchTerm }) {
   };
 
   const onSubmit = (data) => {
-    handleSaveChanges(data);
+    const isAnyCategoryEmpty = data.categories.some(
+      (category) => !category.name.trim()
+    );
+    if (isAnyCategoryEmpty) {
+      Notiflix.Notify.warning(
+        "You cannot create a category with an empty name."
+      );
+    } else {
+      handleSaveChanges(data);
+    }
   };
 
   const cancelCategoryUpdate = (index) => {
     const currentValues = getValues("categories");
-    currentValues[index] = fields[index];
-    reset({ categories: currentValues });
+    if (!currentValues[index].name.trim()) {
+      remove(index);
+    } else {
+      currentValues[index] = fields[index];
+      reset({ categories: currentValues });
+    }
     setIsEditing(false);
   };
 
